@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Average Heart Rate by Age & Occupation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #2193b0, #6dd5ed);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 900px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            color: #ffffff;
+            background: #2193b0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        th {
+            background-color: #2193b0;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .chart-container {
+            width: 90%;
+            max-width: 800px;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Average Heart Rate by Age, Occupation, & Lifestyle</h2>
+
+    <div class="container">
+        <table>
+            <tr>
+                <th>Age Group</th>
+                <th>Resting HR (bpm)</th>
+                <th>Office Worker</th>
+                <th>Athlete</th>
+                <th>Heart Disease</th>
+                <th>Smoker</th>
+            </tr>
+            <tr><td>Newborn (0-1 yr)</td> <td>120-160</td> <td>—</td> <td>—</td> <td>—</td> <td>—</td></tr>
+            <tr><td>Child (1-10 yrs)</td> <td>70-120</td> <td>—</td> <td>—</td> <td>—</td> <td>—</td></tr>
+            <tr><td>Teenager (11-18 yrs)</td> <td>60-100</td> <td>70-90</td> <td>50-70</td> <td>80-110</td> <td>90-110</td></tr>
+            <tr><td>Young Adult (19-30 yrs)</td> <td>60-90</td> <td>65-85</td> <td>45-65</td> <td>75-105</td> <td>85-110</td></tr>
+            <tr><td>Adult (31-50 yrs)</td> <td>60-85</td> <td>70-80</td> <td>50-70</td> <td>80-110</td> <td>90-120</td></tr>
+            <tr><td>Senior (51-70 yrs)</td> <td>60-80</td> <td>75-85</td> <td>55-75</td> <td>85-115</td> <td>95-130</td></tr>
+            <tr><td>Elderly (71+ yrs)</td> <td>60-75</td> <td>80-90</td> <td>60-80</td> <td>90-120</td> <td>100-140</td></tr>
+        </table>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="heartRateChart"></canvas>
+    </div>
+
+    <script>
+        const ageGroups = ["Newborn", "Child", "Teen", "Young Adult", "Adult", "Senior", "Elderly"];
+        const restingHR = [140, 95, 80, 75, 70, 65, 62]; 
+        const officeWorkerHR = [null, null, 80, 75, 75, 78, 82];
+        const athleteHR = [null, null, 60, 55, 58, 60, 65];
+        const heartDiseaseHR = [null, null, 95, 90, 95, 100, 110];
+        const smokerHR = [null, null, 100, 98, 105, 110, 120];
+
+        let ctx = document.getElementById('heartRateChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ageGroups,
+                datasets: [
+                    {
+                        label: 'Resting HR',
+                        data: restingHR,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                        fill: true
+                    },
+                    {
+                        label: 'Office Worker',
+                        data: officeWorkerHR,
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        fill: true
+                    },
+                    {
+                        label: 'Athlete',
+                        data: athleteHR,
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                        fill: true
+                    },
+                    {
+                        label: 'Heart Disease',
+                        data: heartDiseaseHR,
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                        fill: true
+                    },
+                    {
+                        label: 'Smoker',
+                        data: smokerHR,
+                        borderColor: '#6c757d',
+                        backgroundColor: 'rgba(108, 117, 125, 0.2)',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        enabled: true,
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: '#000',
+                        titleColor: '#fff',
+                        bodyColor: '#fff'
+                    }
+                },
+                elements: {
+                    line: {
+                        tension: 0.3
+                    },
+                    point: {
+                        radius: 5,
+                        hoverRadius: 7
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        suggestedMin: 50,
+                        suggestedMax: 160
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

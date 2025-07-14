@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Category Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: auto;
+            margin: 0;
+            padding-bottom: 20px;
+            transition: background-color 0.5s ease;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2193b0;
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 1.1em;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            background-color: #2193b0;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 15px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #1d75a7;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .bmi-table {
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        th {
+            background-color: #2193b0;
+            color: white;
+        }
+        .underweight { background-color: #ffcc00; }
+        .normal { background-color: #28a745; color: white; }
+        .overweight { background-color: #ffa500; color: white; }
+        .obese { background-color: #dc3545; color: white; }
+
+        /* Suggestions Box */
+        .suggestions {
+            display: none;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+            text-align: left;
+        }
+        .suggestions h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .suggestions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .suggestions ul li {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>BMI Category Calculator</h2>
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" step="0.1" required>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" step="0.1" required>
+
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <p class="result" id="bmiResult"></p>
+
+        <div class="suggestions" id="bmiAdvice">
+            <h3>Health Suggestions:</h3>
+            <ul id="adviceList"></ul>
+        </div>
+    </div>
+
+    <div class="bmi-table">
+        <h2>BMI Chart with Height & Weight</h2>
+        <table>
+            <tr>
+                <th>BMI Range</th>
+                <th>Category</th>
+                <th>Example Weight for 170 cm Height</th>
+            </tr>
+            <tr class="underweight">
+                <td>&lt; 18.5</td>
+                <td>Underweight</td>
+                <td>Below 53 kg</td>
+            </tr>
+            <tr class="normal">
+                <td>18.5 - 24.9</td>
+                <td>Normal Weight</td>
+                <td>54 - 72 kg</td>
+            </tr>
+            <tr class="overweight">
+                <td>25 - 29.9</td>
+                <td>Overweight</td>
+                <td>73 - 86 kg</td>
+            </tr>
+            <tr class="obese">
+                <td>30+</td>
+                <td>Obese</td>
+                <td>Above 87 kg</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            let weight = parseFloat(document.getElementById('weight').value);
+            let height = parseFloat(document.getElementById('height').value);
+            let resultElement = document.getElementById('bmiResult');
+            let adviceElement = document.getElementById('bmiAdvice');
+            let adviceList = document.getElementById('adviceList');
+
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                resultElement.innerText = "Please enter valid values.";
+                resultElement.className = "result";
+                adviceElement.style.display = "none";
+                document.body.style.backgroundColor = "#f0f8ff";
+                return;
+            }
+
+            // Convert height from cm to meters
+            height = height / 100;
+
+            // Calculate BMI using the formula: BMI = weight / height²
+            let bmi = weight / (height * height);
+            bmi = bmi.toFixed(1);
+
+            // Determine BMI category and suggestions
+            let category = "";
+            let categoryClass = "";
+            let advice = [];
+
+            if (bmi < 18.5) {
+                category = "Underweight";
+                categoryClass = "underweight";
+                advice = ["Increase calorie intake", "Include protein-rich foods", "Exercise moderately"];
+                document.body.style.backgroundColor = "#fff3cd"; 
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                category = "Normal Weight";
+                categoryClass = "normal";
+                advice = ["Maintain a balanced diet", "Stay active", "Regular check-ups"];
+                document.body.style.backgroundColor = "#d4edda";
+            } else if (bmi >= 25 && bmi < 29.9) {
+                category = "Overweight";
+                categoryClass = "overweight";
+                advice = ["Reduce processed food intake", "Increase physical activity", "Monitor portion sizes"];
+                document.body.style.backgroundColor = "#ffeeba";
+            } else {
+                category = "Obese";
+                categoryClass = "obese";
+                advice = ["Consult a doctor", "Follow a structured exercise plan", "Adopt a healthy eating lifestyle"];
+                document.body.style.backgroundColor = "#f8d7da";
+            }
+
+            resultElement.innerText = `Your BMI: ${bmi} (${category})`;
+            resultElement.className = "result " + categoryClass;
+
+            adviceList.innerHTML = advice.map(item => `<li>✅ ${item}</li>`).join('');
+            adviceElement.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>

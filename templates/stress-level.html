@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Level Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.5s ease;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+        h2 {
+            color: #2193b0;
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 1.1em;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            background-color: #2193b0;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 15px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #1d75a7;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .low-stress { background-color: #28a745; color: white; }
+        .moderate-stress { background-color: #ffcc00; color: black; }
+        .high-stress { background-color: #dc3545; color: white; }
+        .stress-advice {
+            display: none;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+            text-align: left;
+        }
+        .stress-advice h3 {
+            color: #dc3545;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .stress-advice ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .stress-advice ul li {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Stress Level Finder</h2>
+        <label for="heartRate">Heart Rate (bpm):</label>
+        <input type="number" id="heartRate" required>
+
+        <label for="sleep">Sleep Duration (hours):</label>
+        <input type="number" id="sleep" step="0.1" required>
+
+        <label for="steps">Daily Steps:</label>
+        <input type="number" id="steps" required>
+
+        <button onclick="calculateStress()">Calculate Stress</button>
+        <p class="result" id="stressResult"></p>
+
+        <div class="stress-advice" id="stressAdvice">
+            <h3>Ways to Reduce Stress:</h3>
+            <ul>
+                <li>✅ Practice deep breathing exercises</li>
+                <li>✅ Get at least 7-8 hours of sleep</li>
+                <li>✅ Exercise regularly to improve mood</li>
+                <li>✅ Reduce caffeine and sugar intake</li>
+                <li>✅ Take breaks and engage in hobbies</li>
+                <li>✅ Talk to a friend or therapist</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function calculateStress() {
+            let heartRate = parseFloat(document.getElementById('heartRate').value);
+            let sleep = parseFloat(document.getElementById('sleep').value);
+            let steps = parseFloat(document.getElementById('steps').value);
+            let resultElement = document.getElementById('stressResult');
+            let adviceElement = document.getElementById('stressAdvice');
+
+            if (isNaN(heartRate) || isNaN(sleep) || isNaN(steps) || heartRate <= 0 || sleep <= 0 || steps < 0) {
+                resultElement.innerText = "Please enter valid values.";
+                resultElement.className = "result";
+                adviceElement.style.display = "none";
+                document.body.style.backgroundColor = "#f0f8ff";
+                return;
+            }
+
+            // Stress Level Calculation Formula
+            let stressLevel = (heartRate / 10) + ((8 - sleep) * 4) - (steps / 2000);
+            stressLevel = Math.max(1, Math.min(10, Math.round(stressLevel)));
+
+            // Set the class based on stress level
+            let stressClass = "";
+            let bgColor = "#f0f8ff";
+            if (stressLevel <= 3) {
+                stressClass = "low-stress";
+                bgColor = "#d4edda"; // Greenish background for low stress
+                adviceElement.style.display = "none";
+            } else if (stressLevel <= 6) {
+                stressClass = "moderate-stress";
+                bgColor = "#fff3cd"; // Yellowish background for moderate stress
+                adviceElement.style.display = "none";
+            } else {
+                stressClass = "high-stress";
+                bgColor = "#f8d7da"; // Reddish background for high stress
+                adviceElement.style.display = "block"; // Show stress relief advice
+            }
+
+            // Apply background color and display stress level
+            document.body.style.backgroundColor = bgColor;
+            resultElement.innerText = "Your Stress Level: " + stressLevel + "/10";
+            resultElement.className = "result " + stressClass;
+        }
+    </script>
+</body>
+</html>

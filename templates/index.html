@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sleep Disorder Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3399ff; /* lighter, bold blue */
+            color: #000;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+        }
+
+        nav {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        form {
+            max-width: 500px;
+            margin: auto;
+            background-color: #fefefe;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f0f8ff;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sleep Disorder Prediction</h1>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/bmi-category">BMI Category</a>
+        <a href="/heart-rate">Heart Rate</a>
+        <a href="/stress-level">Stress Level</a>
+    </nav>
+
+    <form action="/predict" method="POST">
+        <label>Age:
+            <input type="number" name="age" required>
+        </label>
+        <label>Gender (0=Male, 1=Female):
+            <input type="number" name="gender" required>
+        </label>
+        <label>Sleep Duration:
+            <input type="number" name="sleep_duration" step="0.1" required>
+        </label>
+        <label>Physical Activity (min):
+            <input type="number" name="physical_activity" required>
+        </label>
+        <label>Stress Level:
+            <input type="number" name="stress_level" required>
+        </label>
+        <label>BMI Category (number):
+            <input type="number" name="bmi_category" required>
+        </label>
+        <label>Systolic BP:
+            <input type="number" name="systolic_bp" required>
+        </label>
+        <label>Diastolic BP:
+            <input type="number" name="diastolic_bp" required>
+        </label>
+        <label>Heart Rate:
+            <input type="number" name="heart_rate" required>
+        </label>
+        <label>Daily Steps:
+            <input type="number" name="daily_steps" required>
+        </label>
+        <label>Smoking (0 or 1):
+            <input type="number" name="smoking" required>
+        </label>
+        <label>Alcohol Consumption (0 or 1):
+            <input type="number" name="alcohol_consumption" required>
+        </label>
+        <button type="submit">Predict</button>
+    </form>
+
+</body>
+</html>
